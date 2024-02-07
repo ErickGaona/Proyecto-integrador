@@ -48,7 +48,7 @@ object Graficas {
 
     //CSV
 
-    // numero de camiseta de los delanteros
+    // numero de camiseta de los delanteros-> Genera grafico density plot
     def densityNumeroC(data: List[Map[String, String]]): Unit = {
       val listNroShirt: List[Double] = data
         .filter(row => row("squads_position_name") == "forward" && row("squads_shirt_number") != "0")
