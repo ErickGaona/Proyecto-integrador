@@ -37,14 +37,14 @@ object Graficas {
     )
     //Metodos graficos desde el CSV
 
-    densityNumeroC(contentFile)
-    frecuenciaGoles(contentFile2)
-    ganadoresdeMundiales(contentFile2)
+    //densityNumeroC(contentFile)
+    //frecuenciaGoles(contentFile2)
+    //ganadoresdeMundiales(contentFile2)
 
     //Metodo graficos desde BD
-    CapacidadMaxE(EstadiosCapMgrafico().transact(xa).unsafeRunSync())
+    //CapacidadMaxE(EstadiosCapMgrafico().transact(xa).unsafeRunSync())
     graficaEdadGoles(edadGoles().transact(xa).unsafeRunSync())
-    graficaEdadPartidos((edadPartidos()).transact(xa).unsafeRunSync())
+    //graficaPromedioJug(promedioedadJug().transact(xa).unsafeRunSync())
 
     //CSV
 
@@ -147,7 +147,7 @@ object Graficas {
           FROM player
           INNER JOIN squad ON player.playerid = squad.playerid
           INNER JOIN goal ON squad.playerid = goal.playerId
-          WHERE YEAR(birthDay) >= 1940
+          WHERE YEAR(birthDay) >=1990
           GROUP BY edad;
     """
       .query[(Int, Int)]
@@ -163,28 +163,42 @@ object Graficas {
 
   }
 
-  // Gráfica de dispersión sobre la relación entre la edad de los jugadores (desde 1930) y la cantidad de partidos en los que han participado
-  def edadPartidos(): ConnectionIO[List[(Int, Int)]] = {
+  // Gráfica de promedio de edad de jugadores en funcion de su posicion del torneo de "2022"
+  def promedioedadJug(): ConnectionIO[List[(String, Double)]] = {
     sql"""
-      SELECT (YEAR(CURRENT_DATE) - YEAR(birthDay)) AS edad, COUNT(matchs.matchId) AS total_partidos
-          FROM player
-          INNER JOIN squad ON player.playerid = squad.playerid
-          INNER JOIN matchs ON squad.teamId = matchs.homeTeamId OR squad.teamId = matchs.AwayTeamId
-          WHERE YEAR(birthDay) >= 1930
-          GROUP BY edad;
+      SELECT s.positionName, AVG(YEAR(CURDATE()) - YEAR(p.birthDay)) AS averageAge
+    FROM squad s
+    JOIN player p ON s.playerid = p.playerid
+    JOIN tournament t ON s.tournamentid = t.tournamentid
+    WHERE t.tournamentYear = 2022  -- Filtrar por el año del torneo
+    GROUP BY s.positionName;
     """
-      .query[(Int, Int)]
+      .query[(String, Double)]
       .to[List]
   }
-  def graficaEdadPartidos(data: List[(Int, Int)]): Unit = {
-    val f = Figure()
-    val p = f.subplot(0)
-    p += plot(data.map(_._1), data.map(_._2), '+')
-    p.xlabel = "Edad"
-    p.ylabel = "Partidos Participados"
-    f.saveas("Graficas\\BD_PartidosECantidad.png")
 
+  def graficaPromedioJug(data: List[(String, Double)]) = {
+    val indices = Index(data.map(_._1).toArray)
+    val values = Vec(data.map(_._2).toArray)
 
+    val series = Series(indices, values)
+
+    val barPlot = saddle.barplotHorizontal(series,
+      xLabFontSize = Option(RelFontSize(0.5))
+    )(
+      par
+        .xLabelRotation(-90)
+        .xNumTicks(0)
+        .xlab("Posiciones")
+        .ylab("Promedio")
+        .main("Promedio Edades- Posiciones")
+    )
+
+    pngToFile(
+      new File("Graficas\\BD_PromedioJug.png"),
+      barPlot.build,
+      5000
+    )
   }
 
 }
