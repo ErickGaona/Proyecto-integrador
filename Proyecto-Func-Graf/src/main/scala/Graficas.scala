@@ -140,7 +140,7 @@ object Graficas {
     pngToFile(new File("Graficas\\BD_EstadiosCap.png"),barPlot.build,5000)
   }
 
-  // Gráfica de dispersión sobre la relación entre la edad de los jugadores (desde 1940) y el número de goles que han marcado en los partidos.
+  // Gráfica de dispersión sobre la relación entre la edad de los jugadores (1990) y el número de goles que han marcado en los partidos.
   def edadGoles(): ConnectionIO[List[(Int, Int)]] = {
     sql"""
       SELECT (YEAR(CURRENT_DATE) - YEAR(birthDay)) AS edad, COUNT(goalId) AS total_goles
