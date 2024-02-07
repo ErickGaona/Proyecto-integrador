@@ -24,6 +24,8 @@ object Graficas {
     val contentFile2:List[Map[String, String]] = reader2.allWithHeaders()
     reader.close()
     reader2.close()
+    val rutaArchivo = "Graficas/BD_PartidosECantidad.png"
+
 
     //Conexion BD
     val xa = Transactor.fromDriverManager[IO](
@@ -59,7 +61,7 @@ object Graficas {
           .main("Forward Shirt Number") // grafica nombre
       )
 
-      pngToFile(new File("C:\\Users\\Erick Gaona\\Desktop\\Proyecto Bimestral\\Graficas\\CSV_NumeroCamisetaDelanteros.png"), densityforwardNumber.build, 1000)
+      pngToFile(new File("Graficas\\CSV_NumeroCamisetaDelanteros.png"), densityforwardNumber.build, 1000)
 
     }
     //Frecuencia de goles de cada mundial
@@ -79,7 +81,7 @@ object Graficas {
           .main("Frecuencia de goles Mundial")
 
       )
-      pngToFile(new File("C:\\Users\\Erick Gaona\\Desktop\\Proyecto Bimestral\\Graficas\\CSV_FrecuenciaGoles.png"), densitFrecuencia.build, 1000)
+      pngToFile(new File("Graficas\\CSV_FrecuenciaGoles.png"), densitFrecuencia.build, 1000)
 
     }
     //Cuantos mundiales a ganado cada pais
@@ -104,7 +106,7 @@ object Graficas {
           .ylab("Cantidad de mundiales")
           .main("Paises")
       )
-      pngToFile(new File("C:\\Users\\Erick Gaona\\Desktop\\Proyecto Bimestral\\Graficas\\CSV_FrecGanadores.png"), bar1.build, 1000)
+      pngToFile(new File("Graficas\\CSV_FrecGanadores.png"), bar1.build, 1000)
 
   //BD
   // Mostrar los estadios y su capacidad en un país específico:
@@ -135,7 +137,7 @@ object Graficas {
         .main("Capacidad Maxima")
     )
 
-    pngToFile(new File("C:\\Users\\Erick Gaona\\Desktop\\Proyecto Bimestral\\Graficas\\BD_EstadiosCap.png"),barPlot.build,5000)
+    pngToFile(new File("Graficas\\BD_EstadiosCap.png"),barPlot.build,5000)
   }
 
   // Gráfica de dispersión sobre la relación entre la edad de los jugadores (desde 1940) y el número de goles que han marcado en los partidos.
@@ -157,7 +159,7 @@ object Graficas {
     p += plot(data.map(_._1), data.map(_._2), '+' )
     p.xlabel = "Edad"
     p.ylabel = "Goles"
-    f.saveas("C:\\Users\\Erick Gaona\\Desktop\\Proyecto Bimestral\\Graficas\\BD_PartidosEGoles.png")
+    f.saveas("Graficas\\BD_PartidosEGoles.png")
 
   }
 
@@ -180,7 +182,7 @@ object Graficas {
     p += plot(data.map(_._1), data.map(_._2), '+')
     p.xlabel = "Edad"
     p.ylabel = "Partidos Participados"
-    f.saveas("C:\\Users\\Erick Gaona\\Desktop\\Proyecto Bimestral\\Graficas\\BD_PartidosECantidad.png")
+    f.saveas("Graficas\\BD_PartidosECantidad.png")
 
 
   }
