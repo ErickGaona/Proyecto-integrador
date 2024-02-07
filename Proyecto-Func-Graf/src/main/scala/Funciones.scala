@@ -79,8 +79,7 @@ object Funciones {
 
 
     // ¿Cuál es el número de camiseta (squads_shirt_number) más común que se utiliza en cada una de las posiciones
-    // (squads_position_name)
-
+   
     // Agrupar por posición y número de camiseta y contar la frecuencia
     val posicionYnumero = contentAlineacionesXTorneo.groupBy(record => (record("squads_position_name"), record("squads_shirt_number")))
       .mapValues(_.size)
