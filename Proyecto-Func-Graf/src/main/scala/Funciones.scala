@@ -27,9 +27,7 @@ object Funciones {
     readerAlineacionesXTorneo.close()
 
 
-    // La capacidad mínima, máxima y el promedio de la capacidad de los estadios en los que se ha jugado algún partido del mundial. La columna que deben utilizar es: stadiums_stadium_capacity.
-
-    // Extraer la capacidad de los estadios y calcular la capacidad mínima, máxima y promedio
+     // Extraer la capacidad de los estadios y calcular la capacidad mínima, máxima y promedio
     val capacidad: List[Int] = contentFilePartidosYGoles
       .flatMap(_.get("stadiums_stadium_capacity").filter(_.forall(_.isDigit)).map(_.toInt))
     val minCapacidad = capacidad.min
@@ -40,7 +38,7 @@ object Funciones {
     println(s"Capacidad máxima: $maxCapacidad")
     println(s"Capacidad promedio: $promCapacidad")
 
-    // ¿Cuál es el minuto más común en el que se han marcado un gol? Su respuesta debe presentar el resultado para los
+    // ¿Cuál es el minuto más común en el que se han marcado un gol? 
     // torneos masculinos y otra los torneos femeninos.
     //Hombres
 
