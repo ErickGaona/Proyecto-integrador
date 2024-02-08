@@ -201,5 +201,35 @@ object Graficas {
     )
   }
 
+      //grafica para obtener numero de partidos jugados en los estadios de cada capacidad
+  def obtenerDatosEstadios(): ConnectionIO[List[(Int, Int)]] = {
+    sql"""
+        SELECT s.capacity, COUNT(*) AS num_partidos_jugados
+            FROM matchs m
+            JOIN stadium s ON m.stadiumId = s.stadiumId
+            WHERE s.capacity > 60000
+            GROUP BY s.capacity
+      """.query[(Int, Int)].to[List]
+  }
+
+  //  generar el box plot
+  def generarBoxPlot(data: List[(Int, Int)]): Unit = {
+    val capacities = DenseVector(data.map(_._1.toDouble).toArray)
+    val numPartidos = DenseVector(data.map(_._2.toDouble).toArray)
+
+    val fig = Figure()
+    val plt = fig.subplot(0)
+
+    val boxPlot = plt += breeze.plot.plotting.BoxPlot(capacities, numPartidos, labels = List("Número de partidos jugados"))
+
+    plt.xlabel = "Capacidad del estadio"
+    plt.ylabel = "Número de partidos jugados"
+    plt.title = "Capacidad del estadio y el número de partidos jugados"
+
+    pngToFile(
+      new File("Graficas\\BD_PartidosJuga.png"),
+      barPlot.build, 5000)
+  }
+
 }
 
