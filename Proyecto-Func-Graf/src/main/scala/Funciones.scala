@@ -26,8 +26,8 @@ object Funciones {
     readerPartidosYGoles.close()
     readerAlineacionesXTorneo.close()
 
-
-     // Extraer la capacidad de los estadios y calcular la capacidad mínima, máxima y promedio
+    // 1.
+    // Extraer la capacidad de los estadios y calcular la capacidad mínima, máxima y promedio
     val capacidad: List[Int] = contentFilePartidosYGoles
       .flatMap(_.get("stadiums_stadium_capacity")
       .filter(_.forall(_.isDigit)).map(_.toInt)) //filtra los caracteres de cada capacidad para quedarse solo con los dígitos
@@ -40,6 +40,7 @@ object Funciones {
     println(s"Capacidad máxima: $maxCapacidad")
     println(s"Capacidad promedio: $promCapacidad")
 
+    // 2.
     // ¿Cuál es el minuto más común en el que se han marcado un gol? 
     // Torneos masculinos y otra los torneos femeninos.
     //Hombres
@@ -51,6 +52,7 @@ object Funciones {
       .map(x => x._1 -> x._2.length) // Los mapeamos por clave(minutos) y valor(veces).
       .maxBy(_._2)._1 // Encuentramos el par clave-valor que tiene el valor máximo.
 
+    // 3.
     //Mujeres
     val minutoMasComunFemenino = contentFilePartidosYGoles
       .filter(x => x("tournaments_tournament_name").contains("Women"))
@@ -62,7 +64,8 @@ object Funciones {
 
     println(s"Minuto más común en torneos masculinos: $minutoMasComunMasculino")
     println(s"Minuto más común en torneos femeninos: $minutoMasComunFemenino")
-    
+
+    // 4.
     // ¿Cuál es el periodo más común en los que se han marcado goles en todos los mundiales? 
     // Obtener todos los minutos de gol
     val minutos = contentFilePartidosYGoles
@@ -76,7 +79,7 @@ object Funciones {
     // Resultado
     println(s"Periodo más común en el que se han marcado goles en todos los mundiales: $periodo")
 
-
+    // 5.
     // ¿Cuál es el número de camiseta  más común que se utiliza en cada una de las posiciones
     // Agrupar por posición y número de camiseta y contar la frecuencia
     val posicionYnumero = contentAlineacionesXTorneo
@@ -92,19 +95,20 @@ object Funciones {
 
     numerocamisetaComun.foreach((position, shirtNumber) => println(s"Posición: $position, Número de camiseta más común: $shirtNumber"))
 
+    // 6.
     // Encontrar la frecuencia de los marcadores en los mundiales de fútbol
     val frecuenciaMarcadores = contentFilePartidosYGoles
-      .flatMap(x => List(x("matches_home_team_score"),x("matches_away_team_score")))
+      .flatMap(x => 
+               List(
+                 x("matches_home_team_score"),
+                 x("matches_away_team_score")))
       .groupBy(identity)
       .mapValues(_.size)
 
-    // Imprimir la frecuencia de los marcadores
+    // Resultado
     println("Frecuencia de los marcadores:")
     frecuenciaMarcadores.foreach { case (marcador, frecuencia) => println(s"$marcador: $frecuencia")
+                                  
     }
-
   }
-
-
-
 }
