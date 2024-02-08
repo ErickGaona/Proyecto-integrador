@@ -66,12 +66,12 @@ object Funciones {
     // ¿Cuál es el periodo más común en los que se han marcado goles en todos los mundiales? 
     // Obtener todos los minutos de gol
     val minutos = contentFilePartidosYGoles
-    .flatMap(_("goals_match_period").split(","))
+      .flatMap(_("goals_match_period").split(","))
     
     // Encontrar el periodo más común
     val periodo = minutos
-    .groupBy(identity)
-    .maxBy(_._2.length)._1
+      .groupBy(identity)
+      .maxBy(_._2.length)._1
 
     // Resultado
     println(s"Periodo más común en el que se han marcado goles en todos los mundiales: $periodo")
@@ -80,7 +80,9 @@ object Funciones {
     // ¿Cuál es el número de camiseta  más común que se utiliza en cada una de las posiciones
     // Agrupar por posición y número de camiseta y contar la frecuencia
     val posicionYnumero = contentAlineacionesXTorneo
-    .groupBy(record => (record("squads_position_name"), record("squads_shirt_number")))
+    .groupBy(x => 
+             (x("squads_position_name"), 
+              x("squads_shirt_number")))
     .mapValues(_.size)
 
     // Encontrar el número de camiseta más común para cada posición
