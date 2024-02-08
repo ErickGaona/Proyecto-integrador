@@ -19,7 +19,7 @@ object Funciones {
 
     val readerPartidosYGoles = CSVReader.open(new File(path2DataFilePartidosYGoles))
     val readerAlineacionesXTorneo = CSVReader.open(new File(path2DataFileAlineacionesXTorneo))
-    //val contentFile: List[List[String]] = reader.all()
+
     val contentFilePartidosYGoles: List[Map[String, String]] = readerPartidosYGoles.allWithHeaders()
     val contentAlineacionesXTorneo: List[Map[String, String]] = readerAlineacionesXTorneo.allWithHeaders()
 
@@ -65,7 +65,7 @@ object Funciones {
     println(s"Minuto más común en torneos masculinos: $minutoMasComunMasculino")
     println(s"Minuto más común en torneos femeninos: $minutoMasComunFemenino")
 
-    //¿Cuál es el periodo más común en los que se han marcado goles en todos los mundiales? (columna: goals_match_period)
+    //¿Cuál es el periodo más común en los que se han marcado goles en todos los mundiales? 
 
     // Obtener todos los minutos de gol
     val minutos = contentFilePartidosYGoles.flatMap(_("goals_match_period").split(","))
@@ -78,7 +78,7 @@ object Funciones {
     println(s"Periodo más común en el que se han marcado goles en todos los mundiales: $periodo")
 
 
-    // ¿Cuál es el número de camiseta (squads_shirt_number) más común que se utiliza en cada una de las posiciones
+    // ¿Cuál es el número de camiseta  más común que se utiliza en cada una de las posiciones
    
     // Agrupar por posición y número de camiseta y contar la frecuencia
     val posicionYnumero = contentAlineacionesXTorneo.groupBy(record => (record("squads_position_name"), record("squads_shirt_number")))
